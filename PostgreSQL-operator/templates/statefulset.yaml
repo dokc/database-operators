@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{.Values.metadata.name}}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.metadata.name}}
+  serviceName: {{.Values.metadata.name}}-service
+  replicas: {{ .Values.database.replicas }}
+  template:
+    metadata:
+      labels: 
+        app: {{.Values.metadata.name}}
+    spec:
+     volumes: 
+        - name: {{ .Values.metadata.name}}-volume
+          persistentVolumeClaim:
+            claimName: {{ .Values.metadata.name}}-claim
+     containers:
+      - name: {{.Values.metadata.name}}
+        image: {{ .Values.database.image }}
+        imagePullPolicy: {{ .Values.database.pullPolicy}}
+       
